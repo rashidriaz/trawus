@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "212620929506",
+    "project_id": "trawus-68bd0",
+    "storage_bucket": "trawus-68bd0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:212620929506:android:958c06395bfd0d4cb171bb",
+        "android_client_info": {
+          "package_name": "com.example.trawus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "212620929506-a0av7hv2u5efflp73s81aqabu6bsrjne.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.trawus",
+            "certificate_hash": "974434a09dd19edad7e87b3e3d5fb4a47e641b53"
+          }
+        },
+        {
+          "client_id": "212620929506-nv7fdb5b0pfms443n2v204287p98bup1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxoUA9NJZ55WhCD06WZ0UhHvynl6IN0MY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "212620929506-nv7fdb5b0pfms443n2v204287p98bup1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
