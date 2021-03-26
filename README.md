@@ -1,16 +1,28 @@
-# trawus
+# trawus Inc.
+# Motivation
+In the older systems of tourism business, there seems to be a huge communication gap and lack of trust between the tourism companies and the customers. And most of the time, their facilities were not up to the mark. There was no security for your money. The support system and customer service care were not good at all. And people always wanted a trustful origin where they can get packages according to their own requirements and reliable trips and tours. We here at TRAWUS Inc. strive to provide you a service which helps you find different tourism and travel agencies offering variety of International and Domestic packages varying from under budget to Elite. You can select any package which suits you the best. At TRAWUS Inc. Quality is considered as our topmost Priority We offer our clients with high quality services that ensures the fulfillment of our clients’ satisfaction. We try to make our client’s life a whole lot convenient TRAWUS Inc. provides you with such a platform that places all your travel needs at one place. From booking of cabs and airline tickets to booking of hotels, TRAWUS Inc. has it all. With TRAWUS Inc. your next trip is just One Click Away!Our main goal is to cover the shortcomings of market. We decided to work in the field where there was margin of Improvement. We have searched for different fields and at the end we came across this field.
+As we know Pakistan is a heaven for tourism. Unfortunately, due to some unwanted circumstances Tourism was badly affected in this region but as the Conditions begin to be 
+better we have seen a sudden hype in this field. 
+Pakistan is being recognized as World’s most favorite tourism spot as declared by a globally known American magazine. Pakistan has some supernatural spots which attracts 
+the outer World. But there is no such Companies which offer the complete tour facilities in the country. It is too difficult and much more costly for them to travel and stay in this country. Also the Transportation system is in Worst Conditions. All these conditions are favorable and attractive for a businessman to capture the market. In this field there is no competition and this is the best time and opportunity for someone to start a new setup. The idea which is unique gets success. A copied plan or idea can 
+never take you to something good.
 
-A new Flutter project.
+## Scope
+TRAWUS Inc. is your Go to Travel companion where you can explore a variety of different packages (Budget to Luxury) to make your next trip memorable. We pick you from your door step and drop you to your next holiday destination and back to your home by keeping your trust and comfort in mind. TRAWUS Inc. provides you with the comfort and good 
+experience. All you need to do is just select a suitable package which fits you the best. Despite all this platform will allow you make package according to your own desires and also you can choose your travel companions by seeing their profiles and ratings. On the other hand you can also book hotels and transportation tickets and all from one platform. As a new market of travel and tourism is emerging in Pakistan now a days, and many foreigners come to Pakistan to visit its Northern areas but they are facing a lot of problems too because Pakistan is still in development stages and it is working on tourism but we cannot say it is adequate. Customers face a lot of difficulty related to payments and customer services. To overcome this problem we have sorted out a solution. The Company has agreed to control the transactions itself. The booking advance will be 
+collected by the Company and will be passed on to the Customer afterwards. This approach can help both the customer and user as the user would have trust and the market will grow too. Here on trawus app there will be 2 different categories for the tourism companies. First category will include all the verified businesses and the other category will include the unverified businesses. There is no platform available for communication between customer and the travel companies. Which causes a lot of difficulties for both customers and the organizers which mostly results in customer service being compromised. So, we at TRAWUS came up with the solution for both the customers and the travel 
+companies. Here we provide a proper gateway to make all the payments secure and successful. We provide a proper customer services platform where customer can interact with the service provider any time with ease and convenience. And this application also provide the platform to the people who have passion for travelling and they want to take 
+people with them on trips. So that they can earn their bread and butter and also fulfil their passion. On the other hand its hundred time more beneficial for registered travel companies as it will become source of their advertisement and services as well. We have the best service and payback warranty so you can trust on our Company as it is the best in Market as well as the Best deals and enhanced features. You can rely on us to have your dream vacations. We assure you our full cooperation. On the other hand this platform will also become source of income of people with passion of tourism as they will also be able to arrange their trips. So it can be a big problem solver for many people around the world from a normal daily user to the people who are in search of work and have big dreams to fulfil. This application will be a game changer in industry as it will be a platform for daily user(who just have to book hotel and transport tickets), normal people, travelling agencies. And people who have passion of tourism but they have fear of scams and frauds as they don’t want to risk their money. This platform will perform all their desired tasks and also ensures the security of their money.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Objectives
+To provide a proper gateway for the communication between customer and the 
+company.
+• Offer smooth experience of a well-organized trip. 
+• Provides a complete road map with the complete itinerary to the customer. 
+• Provides with the different packages for your next holiday destination.
+• Allows you to choose hotels, transportation and travel companions of your 
+choice and also you can make your own packages.
+• Provides a complete gateway to make the payments more secure and 
+successful. 
+• A customer can provide a review after finishing the trip which can help 
+future tourists to make a better choice for their next holiday trip. 
