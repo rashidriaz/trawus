@@ -27,6 +27,9 @@ dependencies:
   cloud_firestore: 1.0.2
   google_sign_in: "^4.5.1"
   connectivity: ^0.4.6
+  smooth_star_rating: ^1.1.1 # this will help us to add star rating system
+  flutter_svg: ^0.19.3 # this will help us to render svg
+  image_picker: ^0.7.4
 
 
   # The following adds the Cupertino Icons font to your application.

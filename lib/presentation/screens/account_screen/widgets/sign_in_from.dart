@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:trawus/constants.dart';
 import 'package:trawus/domain/Firebase/user_authentications.dart';
-import '../../validations.dart';
-import 'alert_dialog.dart';
+import 'package:trawus/presentation/screens/account_screen/components/email_text_form_field.dart';
+import 'package:trawus/presentation/screens/account_screen/components/password_text_form_field.dart';
+import 'package:trawus/presentation/screens/account_screen/components/submit_form_button.dart';
+import 'package:trawus/presentation/screens/account_screen/components/toggle_signin_and_register_form_button.dart';
+import 'package:trawus/presentation/widget/alert_dialog.dart';
+import '../../../../validations.dart';
 
 class SignInForm extends StatefulWidget {
   final Function(bool isSignIn) isSignIn;
@@ -30,24 +33,7 @@ class _SignInFormState extends State<SignInForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TextFormField(
-            onChanged: (value) {
-              if (Validations.isEmail(value)) {
-                email = value;
-              } else {
-                email = null;
-              }
-            },
-            textCapitalization: TextCapitalization.none,
-            autocorrect: false,
-            validator: (value) {
-              if (value.isEmpty || !Validations.isEmail(value)) {
-                return "Invalid Email Address! Please try Again";
-              }
-              return null;
-            },
-            keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(labelText: "Email Address"),
+          emailTextFormField(
             onSaved: (value) {
               email = value;
             },
@@ -55,27 +41,10 @@ class _SignInFormState extends State<SignInForm> {
           const SizedBox(
             height: 20,
           ),
-          TextFormField(
+          passwordTextFormField(
             onChanged: (value) {
               return Validations.validatePassword(value);
             },
-            validator: (value) {
-              return Validations.validatePassword(value);
-            },
-            decoration: InputDecoration(
-              labelText: "Password",
-              suffixIcon: IconButton(
-                icon: Icon(
-                  showPassword ? Icons.visibility : Icons.visibility_off,
-                ),
-                onPressed: () {
-                  setState(() {
-                    showPassword = !showPassword;
-                  });
-                },
-              ),
-            ),
-            obscureText: showPassword,
             onSaved: (value) {
               password = value;
             },
@@ -86,41 +55,16 @@ class _SignInFormState extends State<SignInForm> {
           TextButton(
               onPressed: forgetPassword, child: Text("Forget Password?")),
           Align(
-            child: ElevatedButton(
-              onPressed: _isLoading ? null : _submitForm,
-              child: _isLoading
-                  ? CircularProgressIndicator()
-                  : Icon(
-                      Icons.keyboard_arrow_right_sharp,
-                      size: 40,
-                    ),
-              style: ElevatedButton.styleFrom(
-                  shape: CircleBorder(), padding: EdgeInsets.all(18)),
-            ),
             alignment: Alignment.center,
+            child: submitFormButton(
+              onPressed: _isLoading ? null : _submitForm,
+              isLoading: _isLoading,
+            ),
           ),
           const SizedBox(
             height: 20,
           ),
-          Row(
-            children: [
-              const Text(
-                "Don't have an account? Click here to ",
-                style: TextStyle(fontSize: 16),
-              ),
-              InkWell(
-                onTap: _renderRegistrationForm,
-                child: const Text(
-                  "Register",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: primaryColor,
-                  ),
-                ),
-              ),
-            ],
-          )
+          clickHereToRegister(onTap: _renderRegistrationForm),
         ],
       ),
     );
@@ -144,7 +88,7 @@ class _SignInFormState extends State<SignInForm> {
                   message:
                       "Verification email sent on $email Verify your email then SignIn",
                   buttonText: "close",
-                  onPressed: (){},
+                  onPressed: () {},
                   context: context);
             });
       }
@@ -172,7 +116,7 @@ class _SignInFormState extends State<SignInForm> {
               message:
                   "An email has been sent on $email Reset your password from there and try again",
               buttonText: "Close",
-          onPressed: (){},
+              onPressed: () {},
             ));
   }
 

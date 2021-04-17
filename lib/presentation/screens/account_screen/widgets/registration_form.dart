@@ -1,15 +1,15 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:trawus/constants.dart';
 import 'package:trawus/domain/Firebase/user_authentications.dart';
-
-import '../../validations.dart';
-import 'alert_dialog.dart';
+import 'package:trawus/presentation/screens/account_screen/components/email_text_form_field.dart';
+import 'package:trawus/presentation/screens/account_screen/components/password_text_form_field.dart';
+import 'package:trawus/presentation/screens/account_screen/components/submit_form_button.dart';
+import 'package:trawus/presentation/screens/account_screen/components/toggle_signin_and_register_form_button.dart';
+import '../../../widget/alert_dialog.dart';
 
 class RegistrationForm extends StatefulWidget {
-  final Function(bool isSignIn) isSignIn;
+  final Function(bool isSignIn) changeSignInState;
 
-  const RegistrationForm(this.isSignIn);
+  const RegistrationForm(this.changeSignInState);
 
   @override
   _RegistrationFormState createState() {
@@ -30,35 +30,16 @@ class _RegistrationFormState extends State<RegistrationForm> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          TextFormField(
-            textCapitalization: TextCapitalization.none,
-            autocorrect: false,
-            key: ValueKey("Email"),
-            validator: (value) {
-              if (value.isEmpty || !Validations.isEmail(value)) {
-                return "Invalid Email Address!! Please try Again";
-              }
-              return null;
-            },
-            keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(labelText: "Email Address"),
-            onSaved: (value) {
-              email = value;
-            },
-          ),
+          emailTextFormField(onSaved: (value) {
+            email = value;
+          }),
           SizedBox(
             height: 20,
           ),
-          TextFormField(
-            key: ValueKey("password"),
+          passwordTextFormField(
             onChanged: (value) {
               password = value;
             },
-            validator: (value) {
-              return Validations.validatePassword(value);
-            },
-            decoration: InputDecoration(labelText: "Password"),
-            obscureText: true,
             onSaved: (value) {
               password = value;
             },
@@ -66,16 +47,13 @@ class _RegistrationFormState extends State<RegistrationForm> {
           SizedBox(
             height: 20,
           ),
-          TextFormField(
-            key: ValueKey("Confirm Password"),
+          confirmPasswordTextFormField(
             validator: (value) {
               if (value != password) {
                 return "Passwords do not match. Please try Again!";
               }
               return null;
             },
-            decoration: InputDecoration(labelText: "Confirm Password"),
-            obscureText: true,
             onSaved: (value) {
               password = value;
             },
@@ -83,39 +61,14 @@ class _RegistrationFormState extends State<RegistrationForm> {
           SizedBox(
             height: 25,
           ),
-          ElevatedButton(
+          submitFormButton(
+            isLoading: _isLoading,
             onPressed: _isLoading ? null : _submitForm,
-            child: _isLoading
-                ? CircularProgressIndicator()
-                : Icon(
-                    Icons.keyboard_arrow_right_sharp,
-                    size: 40,
-                  ),
-            style: ElevatedButton.styleFrom(
-                shape: CircleBorder(), padding: EdgeInsets.all(18)),
           ),
           SizedBox(
             height: 20,
           ),
-          Row(
-            children: [
-              const Text(
-                "Already have an account? Click here to ",
-                style: TextStyle(fontSize: 16),
-              ),
-              InkWell(
-                onTap: _renderSignInForm,
-                child: const Text(
-                  "SignIn",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: primaryColor,
-                  ),
-                ),
-              ),
-            ],
-          ),
+          clickHereToSignIn(onTap: _renderSignInForm),
         ],
       ),
     );
@@ -152,6 +105,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
   }
 
   void _renderSignInForm() {
-    widget.isSignIn(true);
+    widget.changeSignInState(true);
   }
 }
