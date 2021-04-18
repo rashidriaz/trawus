@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trawus/domain/Firebase/user_authentications.dart';
+import 'package:trawus/presentation/screens/home_screen/home_screen.dart';
 import 'package:trawus/presentation/widget/alert_dialog.dart';
 import 'package:trawus/presentation/widget/image_button.dart';
 
@@ -19,7 +20,7 @@ class _SignInWithGoogleButtonState extends State<SignInWithGoogleButton> {
         ? CircularProgressIndicator()
         : ImageButton(
             onPressed: signInWithGoogle,
-            caption: "Sign in with Facebook",
+            caption: "Sign in with Google",
             imageUrl: "assets/images/google.png",
           );
   }
@@ -29,7 +30,7 @@ class _SignInWithGoogleButtonState extends State<SignInWithGoogleButton> {
     await UserAuthentication.signInWithGoogle();
     _changeIsLoadingState();
     if (UserAuthentication.getUser().uid != null) {
-      print("User Signed In!");
+      Navigator.of(context).popAndPushNamed(HomeScreen.routeName);
     }
   }
 

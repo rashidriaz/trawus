@@ -5,6 +5,7 @@ import 'package:trawus/presentation/screens/account_screen/components/email_text
 import 'package:trawus/presentation/screens/account_screen/components/password_text_form_field.dart';
 import 'package:trawus/presentation/screens/account_screen/components/submit_form_button.dart';
 import 'package:trawus/presentation/screens/account_screen/components/toggle_signin_and_register_form_button.dart';
+import 'package:trawus/presentation/screens/home_screen/home_screen.dart';
 import 'package:trawus/presentation/widget/alert_dialog.dart';
 import '../../../../validations.dart';
 
@@ -92,6 +93,7 @@ class _SignInFormState extends State<SignInForm> {
                   context: context);
             });
       }
+      Navigator.of(context).popAndPushNamed(HomeScreen.routeName);
       changeIsLoadingStatus();
     }
   }

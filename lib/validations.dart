@@ -6,7 +6,7 @@ class Validations{
     String p =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
 
-    RegExp regExp = new RegExp(p);
+    RegExp regExp = RegExp(p);
 
     return regExp.hasMatch(email);
   }
@@ -16,5 +16,10 @@ class Validations{
       return "Password must be at least 7 characters long";
     }
     return null;
+  }
+
+  static bool isAValidName(String name){
+    RegExp nameRegExp = RegExp('[a-zA-Z]');
+    return nameRegExp.hasMatch(name);
   }
 }

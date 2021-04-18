@@ -22,10 +22,10 @@ class _UserImagePickerState extends State<UserImagePicker> {
       children: [
         CircleAvatar(
           backgroundImage: _pickedImage == null
-              ? null
+              ? AssetImage("assets/images/no_dp.jpg")
               : FileImage(_pickedImage),
           radius: 50,
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: Colors.blueGrey,
         ),
         Container(
           decoration: BoxDecoration(

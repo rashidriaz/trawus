@@ -27,9 +27,9 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
           ],
         ),
-      ): ProfileScreenContent(),
+      ): ProfileScreen(),
 
-      floatingActionButton: searchButton(),
+      floatingActionButton: _bottomNavigationBarIndexNumber == 0 ? searchButton(): null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: _bottomNavigationBar(),
     );

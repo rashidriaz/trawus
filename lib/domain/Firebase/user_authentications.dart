@@ -98,4 +98,13 @@ class UserAuthentication {
     await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
+  static Future<void> updatePassword(String newPassword) async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    await user.updatePassword(newPassword);
+  }
+
+  static bool isLoggedIn() {
+    return FirebaseAuth.instance.currentUser != null;
+  }
 }
