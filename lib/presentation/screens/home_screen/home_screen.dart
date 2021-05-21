@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:trawus/domain/Firebase/auth/user_authentications.dart';
 import 'package:trawus/presentation/screens/home_screen/components/bottom_navigation_bar.dart';
 import 'package:trawus/presentation/screens/profile_screen/profile_screen.dart';
 
@@ -44,7 +45,9 @@ class _HomeScreenState extends State<HomeScreen> {
   FloatingActionButton searchButton(){
     return FloatingActionButton(
       child: Icon(Icons.search),
-      onPressed: (){},
+      onPressed: (){
+        UserAuth.signOut();
+      },
 
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:trawus/domain/Firebase/user_authentications.dart';
+import 'package:trawus/presentation/screens/account_screen/components/create_user_in_firestore.dart';
+import '../../../../domain/Firebase/auth/user_authentications.dart';
 import 'package:trawus/presentation/screens/account_screen/components/email_text_form_field.dart';
 import 'package:trawus/presentation/screens/account_screen/components/password_text_form_field.dart';
 import 'package:trawus/presentation/screens/account_screen/components/submit_form_button.dart';
@@ -80,11 +81,12 @@ class _RegistrationFormState extends State<RegistrationForm> {
     if (isValid) {
       _formKey.currentState.save();
       _changeIsLoadingStatus();
-      await UserAuthentication.authenticate(
+      await UserAuth.authenticate(
           email: email, password: password, context: context);
-      String userID = UserAuthentication.getUser().uid.toString();
+      String userID = UserAuth.user.uid.toString();
       _changeIsLoadingStatus();
-      if (userID != null)
+      if (userID != null) {
+        createUserInFireStore(email);
         showDialog(
             context: context,
             builder: (context) => AlertDialogBox(
@@ -95,7 +97,9 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   buttonText: "Go to SignIn Screen",
                   onPressed: _renderSignInForm,
                 ));
+      }
     }
+    _formKey.currentState.reset();
   }
 
   void _changeIsLoadingStatus() {

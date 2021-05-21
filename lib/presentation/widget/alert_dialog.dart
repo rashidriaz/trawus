@@ -11,7 +11,7 @@ class AlertDialogBox extends StatelessWidget {
       {@required this.title,
       @required this.message,
       @required this.buttonText,
-      @required this.onPressed,
+      this.onPressed,
       @required this.context});
 
   @override

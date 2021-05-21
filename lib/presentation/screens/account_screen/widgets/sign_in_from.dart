@@ -1,6 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:trawus/domain/Firebase/user_authentications.dart';
+import '../../../../domain/Firebase/auth/user_authentications.dart';
 import 'package:trawus/presentation/screens/account_screen/components/email_text_form_field.dart';
 import 'package:trawus/presentation/screens/account_screen/components/password_text_form_field.dart';
 import 'package:trawus/presentation/screens/account_screen/components/submit_form_button.dart';
@@ -77,10 +76,10 @@ class _SignInFormState extends State<SignInForm> {
     if (isValid) {
       _formKey.currentState.save();
       changeIsLoadingStatus();
-      await UserAuthentication.authenticate(
+      await UserAuth.authenticate(
           email: email, password: password, context: context, signIn: true);
-      if (!UserAuthentication.emailVerified()) {
-        UserAuthentication.signOut();
+      if (!UserAuth.emailVerified()) {
+        UserAuth.signOut();
         showDialog(
             context: context,
             builder: (context) {
@@ -108,8 +107,7 @@ class _SignInFormState extends State<SignInForm> {
       );
       return;
     }
-    final auth = FirebaseAuth.instance;
-    auth.sendPasswordResetEmail(email: email);
+    UserAuth.resetPassword(email);
     showDialog(
         context: context,
         builder: (context) => AlertDialogBox(

@@ -8,7 +8,7 @@ class UserInformation extends StatelessWidget{
   Widget build(BuildContext context) {
     return Column(
       children: [
-        displayBasicInfo("Rashid Riaz", "rashidriax0@gmail.com"),
+        displayBasicInfo(),
         Divider(),
         displayExtraInformation(
             location: "LAHORE", rating: "4.5", totalTrips: "100"),
@@ -28,4 +28,5 @@ class UserInformation extends StatelessWidget{
       ],
     );
   }
+
 }

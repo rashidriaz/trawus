@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trawus/domain/helpers/user_helper.dart';
 import 'package:trawus/presentation/screens/profile_screen/widgets/profile_picture_avatar.dart';
 
 Container displayCaptionText(String text) {
@@ -12,14 +13,19 @@ Container displayCaptionText(String text) {
   ));
 }
 
-Row displayCaptionWithIcon(IconData icon, Color iconColor, String text){
+Row displayCaptionWithIcon(IconData icon, Color iconColor, String text) {
   return Row(
     children: [
-      Icon(icon, size: 16, color: iconColor,),
+      Icon(
+        icon,
+        size: 16,
+        color: iconColor,
+      ),
       displayCaptionText(text),
     ],
   );
 }
+
 Container displayContentText(String content) {
   return Container(
       child: Text(
@@ -28,7 +34,7 @@ Container displayContentText(String content) {
   ));
 }
 
-IntrinsicHeight displayBasicInfo(String name, String email){
+IntrinsicHeight displayBasicInfo() {
   return IntrinsicHeight(
     child: Row(
       children: [
@@ -40,11 +46,14 @@ IntrinsicHeight displayBasicInfo(String name, String email){
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            displayCaptionText("Name:"),
-            displayContentText(name),
-            Divider(),
-            displayCaptionText("Email:"),
-            displayContentText(email),
+            SizedBox(
+              height: 20,
+            ),
+            displayContentText(activeUser.name),
+            SizedBox(
+              height: 20,
+            ),
+            displayContentText(activeUser.email),
           ],
         ),
       ],
@@ -52,20 +61,22 @@ IntrinsicHeight displayBasicInfo(String name, String email){
   );
 }
 
-
 Row displayExtraInformation(
-    {@required String location,@required String rating, @required String totalTrips}){
+    {@required String location,
+    @required String rating,
+    @required String totalTrips}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
       Column(
         children: [
           displayContentText(location),
-          displayCaptionWithIcon(
-              Icons.location_on, Colors.indigo, "Location"),
+          displayCaptionWithIcon(Icons.location_on, Colors.indigo, "Location"),
         ],
       ),
-      SizedBox(width: 30,),
+      SizedBox(
+        width: 30,
+      ),
       Column(
         children: [
           displayContentText(rating),
@@ -73,7 +84,9 @@ Row displayExtraInformation(
               Icons.star, Colors.orangeAccent, "Avg. Rating"),
         ],
       ),
-      SizedBox(width: 30,),
+      SizedBox(
+        width: 30,
+      ),
       Column(
         children: [
           displayContentText(totalTrips),

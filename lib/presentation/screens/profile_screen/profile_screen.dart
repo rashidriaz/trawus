@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:trawus/presentation/screens/profile_screen/widgets/user_info.dart';
 
-// ignore: must_be_immutable
 class ProfileScreen extends StatelessWidget {
   static const routeName = "/user/ProfileScreen";
 

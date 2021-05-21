@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class UserAuthentication {
+class UserAuth {
   static Future<void> authenticate(
       {@required email,
       @required String password,
@@ -11,10 +11,10 @@ class UserAuthentication {
       bool signIn = false}) async {
     try {
       if (signIn) {
-        await UserAuthentication._signIn(
+        await UserAuth._signIn(
             email: email, password: password, context: context);
       } else {
-        await UserAuthentication._register(
+        await UserAuth._register(
             email: email, password: password, context: context);
       }
     } on PlatformException catch (error) {
@@ -77,7 +77,7 @@ class UserAuthentication {
     FirebaseAuth.instance.signOut();
   }
 
-  static User getUser() {
+  static User get user {
     return FirebaseAuth.instance.currentUser;
   }
 
@@ -98,13 +98,26 @@ class UserAuthentication {
     await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
-  static Future<void> updatePassword(String newPassword) async {
-    final user = FirebaseAuth.instance.currentUser;
+  static void resetPassword(String email) {
+    final auth = FirebaseAuth.instance;
+    auth.sendPasswordResetEmail(email: email);
+  }
 
-    await user.updatePassword(newPassword);
+  static String get userId {
+    return FirebaseAuth.instance.currentUser.uid;
   }
 
   static bool isLoggedIn() {
     return FirebaseAuth.instance.currentUser != null;
+  }
+
+  static void updateProfile(
+      {@required String name, @required String photoUrl}) {
+    FirebaseAuth.instance.currentUser
+        .updateProfile(displayName: name, photoURL: photoUrl);
+  }
+
+  static void updateEmail(String email){
+    FirebaseAuth.instance.currentUser.verifyBeforeUpdateEmail(email);
   }
 }

@@ -1,9 +1,22 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:trawus/domain/Firebase/user_authentications.dart';
+import 'package:geocode/geocode.dart';
+import 'package:trawus/Models/gender.dart';
+import 'package:trawus/Models/location_address.dart';
+import 'package:trawus/Models/user.dart';
+import 'package:trawus/domain/Firebase/firestore/firestore.dart';
+import 'package:trawus/domain/Firebase/storage/firebase_storage.dart';
+import 'package:trawus/domain/helpers/geocode_helper.dart';
+import 'package:trawus/domain/helpers/provider/user_provider.dart';
+import 'package:trawus/domain/helpers/user_helper.dart';
+import '../../../domain/Firebase/auth/user_authentications.dart';
 import 'package:trawus/presentation/screens/edit_profile_screen/components/edit_profile_app_screen_app_bar.dart';
+import 'package:trawus/presentation/screens/edit_profile_screen/widgets/gender_input.dart';
+import 'package:trawus/presentation/screens/edit_profile_screen/widgets/location_input.dart';
 import 'package:trawus/presentation/screens/edit_profile_screen/widgets/update_button.dart';
+import 'package:trawus/presentation/widget/alert_dialog.dart';
+import 'package:provider/provider.dart';
 import '../../../validations.dart';
 import 'widgets/image_picker.dart';
 
@@ -19,9 +32,17 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   String _name;
-  String _newPassword;
+  String _email;
+  LocationAddress _location;
   File _image;
-  bool _changePassword = false;
+  String _genderValue = Gender.doNotSpecify;
+  bool _isLoading = false;
+
+
+  @override
+  void initState() {
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +55,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           alignment: Alignment.center,
           child: Column(
             children: [
-              UserImagePicker(setImage),
+              UserImagePicker(setImage, activeUser.photoUrl),
               Form(
                 key: _formKey,
                 child: Column(
                   children: [
                     TextFormField(
+                      initialValue: activeUser.name,
                       textCapitalization: TextCapitalization.none,
                       autofocus: false,
                       key: ValueKey("Name"),
@@ -53,33 +75,43 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       },
                     ),
                     SizedBox(
-                      height: 40,
+                      height: 10,
                     ),
-                    updateProfileButton(onPressed: () {}, isLoading: false),
+                    TextFormField(
+                      initialValue: activeUser.email,
+                      textCapitalization: TextCapitalization.none,
+                      autofocus: false,
+                      key: ValueKey("Email"),
+                      keyboardType: TextInputType.name,
+                      decoration: InputDecoration(labelText: "Email"),
+                      validator: (value) {
+                        return validateNameTextFormField(value);
+                      },
+                      onSaved: (value) {
+                        _email = value;
+                      },
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    InputGender(
+                        onChanged: (value) {
+                          setState(() {
+                            _genderValue = value;
+                          });
+                        },
+                        genderValue: _genderValue),
+                    SizedBox(height: 20),
+                    InputLocation(_setLocation),
+                    SizedBox(height: 20),
+                    updateProfileButton(
+                        onPressed: _onFormSubmitted, isLoading: _isLoading),
                     SizedBox(
                       height: 40,
                     ),
                   ],
                 ),
               ),
-              Divider(
-                color: Colors.black26,
-              ),
-              if (_changePassword)
-                TextFormField(
-                  key: ValueKey("new password"),
-                  onChanged: (value) {
-                    return Validations.validatePassword(value);
-                  },
-                  validator: (value) {
-                    return Validations.validatePassword(value);
-                  },
-                  decoration: InputDecoration(labelText: "New Password"),
-                  obscureText: true,
-                  onSaved: (value) {
-                    _newPassword = value;
-                  },
-                ),
               SizedBox(
                 height: 20,
               ),
@@ -93,14 +125,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  onPressed: () async {
-                    if (_changePassword) {
-                      await UserAuthentication.updatePassword(_newPassword);
-                    }
-                    setState(() {
-                      _changePassword = (!_changePassword);
-                    });
-                  },
+                  onPressed: !_isLoading ? _resetPassword : null,
                 ),
               ),
             ],
@@ -124,11 +149,82 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return null;
   }
 
-  String validatePasswordTextFormField(String value) {
-    if (value.isEmpty || !Validations.isEmail(value)) {
-      return "Invalid Email Address!! Please try Again";
-    }
-    return null;
+  void _resetPassword() {
+    UserAuth.resetPassword("rashidriax0@gmail.com");
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialogBox(
+              title: "Reset Your Password",
+              context: context,
+              message:
+                  "An email has been sent on ${activeUser.email} Reset your password from there and try again",
+              buttonText: "Close",
+            ));
   }
 
+  Future<void> _setLocation(Coordinates coordinates) async {
+    _location = await getLocationAddress(coordinates);
+  }
+
+  void _onFormSubmitted() async {
+    _changeIsLoadingState();
+    final formIsValid = _formKey.currentState.validate();
+    if (!formIsValid) {
+      _changeIsLoadingState();
+      return;
+    }
+    _formKey.currentState.save();
+    bool emailIsUpdated = _email != activeUser.email;
+    if (emailIsUpdated) {
+      UserAuth.updateEmail(_email);
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialogBox(
+                title: "Verify your email",
+                context: context,
+                message:
+                    "Verification email sent on $_email Verify your email then SignIn",
+                buttonText: "Close",
+              ));
+    }
+
+    if (_isFormUpdated()) {
+      User user = context.read<UserProvider>().user;
+      user.name = _name;
+      user.gender = _genderValue;
+      user.address = _location;
+      if (_image != null) {
+        String photoUrl;
+        FireStorage.updateProfilePicture(_image)
+            .then((value) => photoUrl = value);
+        user.photoUrl = photoUrl;
+      }
+      FireStore.updateUserData(user: user);
+      UserAuth.updateProfile(name: user.name, photoUrl: user.photoUrl);
+      _changeIsLoadingState();
+      context.watch<UserProvider>().updateUser(user);
+    } else {
+      _changeIsLoadingState();
+    }
+
+    Navigator.of(context).pop();
+  }
+
+  bool _isFormUpdated() {
+    User user = context.read<UserProvider>().user;
+    if (_name != user.name ||
+        _email != user.email ||
+        _location.equals(user.address) ||
+        _genderValue != user.gender ||
+        _image != null) {
+      return true;
+    }
+    return false;
+  }
+
+  void _changeIsLoadingState() {
+    setState(() {
+      _isLoading = !_isLoading;
+    });
+  }
 }

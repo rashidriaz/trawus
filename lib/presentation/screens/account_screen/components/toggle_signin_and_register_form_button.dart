@@ -7,7 +7,7 @@ Row clickHereToRegister({Function onTap}) {
     children: [
       const Text(
         "Don't have an account? Click here to ",
-        style: TextStyle(fontSize: 16),
+        style: TextStyle(fontSize: 14),
       ),
       InkWell(
         onTap: onTap,
@@ -15,7 +15,7 @@ Row clickHereToRegister({Function onTap}) {
           "Register",
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 14,
             color: primaryColor,
           ),
         ),
@@ -29,7 +29,7 @@ Row clickHereToSignIn({Function onTap}) {
     children: [
       const Text(
         "Already have an account? Click here to ",
-        style: TextStyle(fontSize: 16),
+        style: TextStyle(fontSize: 14),
       ),
       InkWell(
         onTap: onTap,

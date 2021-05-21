@@ -3,6 +3,9 @@
    <application
         android:label="trawus"
         android:icon="@mipmap/ic_launcher">
+
+       <meta-data android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyByTh0J7jJGSd16oKCvSuXxlfDesHGaMto"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

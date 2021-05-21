@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:trawus/domain/Firebase/user_authentications.dart';
+import '../../../../domain/Firebase/auth/user_authentications.dart';
 import 'package:trawus/presentation/screens/home_screen/home_screen.dart';
-import 'package:trawus/presentation/widget/alert_dialog.dart';
 import 'package:trawus/presentation/widget/image_button.dart';
 
 class SignInWithGoogleButton extends StatefulWidget {
@@ -27,9 +26,9 @@ class _SignInWithGoogleButtonState extends State<SignInWithGoogleButton> {
 
   Future<void> signInWithGoogle() async {
     _changeIsLoadingState();
-    await UserAuthentication.signInWithGoogle();
+    await UserAuth.signInWithGoogle();
     _changeIsLoadingState();
-    if (UserAuthentication.getUser().uid != null) {
+    if (UserAuth.user.uid != null) {
       Navigator.of(context).popAndPushNamed(HomeScreen.routeName);
     }
   }
