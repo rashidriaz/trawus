@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:trawus/domain/Firebase/auth/user_authentications.dart';
+import 'package:trawus/domain/helpers/user_helper.dart';
 import 'package:trawus/presentation/screens/account_screen/account_screen.dart';
 import 'package:trawus/presentation/screens/home_screen/components/bottom_navigation_bar.dart';
 import 'package:trawus/presentation/screens/profile_screen/profile_screen.dart';
@@ -30,7 +32,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [],
               ),
             )
-          : ProfileScreen(),
+          : Consumer<UserHelper>(
+              builder: (context, _, _a) {
+                return ProfileScreen();
+              },
+            ),
       floatingActionButton:
           _bottomNavigationBarIndexNumber == 0 ? searchButton() : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

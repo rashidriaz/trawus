@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:trawus/Models/user.dart';
 import 'package:trawus/domain/helpers/user_helper.dart';
 import 'package:trawus/presentation/screens/edit_profile_screen/edit_profile_screen.dart';
@@ -8,7 +9,7 @@ class UserInformation extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    User user = activeUser;
+    User user = context.watch<UserHelper>().user;
     return Column(
       children: [
         displayBasicInfo(user),

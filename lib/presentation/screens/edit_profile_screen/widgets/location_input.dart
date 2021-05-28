@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geocode/geocode.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:trawus/domain/helpers/geocode_helper.dart';
 import 'package:trawus/domain/helpers/google_maps_helper.dart';
 import 'package:trawus/domain/helpers/user_helper.dart';
@@ -21,7 +22,7 @@ class _InputLocationState extends State<InputLocation> {
   @override
   Widget build(BuildContext context) {
     if(_previewImageUrl ==null){
-      _showPreview(activeUser.address.coordinates);
+      _showPreview(context.watch<UserHelper>().user.address.coordinates);
     }
     return Column(
       children: [

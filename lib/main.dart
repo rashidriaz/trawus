@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 import 'package:trawus/constants.dart';
 import 'domain/Firebase/auth/user_authentications.dart';
 import 'package:trawus/presentation/screens/account_screen/account_screen.dart';
 import 'package:trawus/presentation/screens/edit_profile_screen/edit_profile_screen.dart';
-import 'file:///D:/Flutter/trawus/lib/presentation/screens/home_screen/home_screen.dart';
+import 'domain/helpers/user_helper.dart';
+import 'presentation/screens/home_screen/home_screen.dart';
 import 'package:trawus/presentation/screens/profile_screen/profile_screen.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(
-    MyApp(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => UserHelper()),
+      ],
+      child: MyApp(),
+    ),
   );
 }
 

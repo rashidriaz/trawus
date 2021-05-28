@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:geocode/geocode.dart';
-import 'package:trawus/Models/gender.dart';
+import 'package:provider/provider.dart';
 import 'package:trawus/Models/location_address.dart';
 import 'package:trawus/Models/user.dart';
 import 'package:trawus/domain/Firebase/storage/firebase_storage.dart';
@@ -29,24 +29,15 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   String _name;
-  String _email;
-  LocationAddress _location;
+  LocationAddress _location = UserHelper().user.address;
   File _image;
-  String _genderValue;
+  String _genderValue = UserHelper().user.gender;
   bool _isLoading = false;
 
   @override
-  void initState() {
-    super.initState();
-    User user = activeUser;
-    _name = user.name ?? ' ';
-    _email = user.email ?? ' ';
-    _location = user.address ?? LocationAddress.defaultAddress;
-    _genderValue = user.gender ?? Gender.doNotSpecify;
-  }
-
-  @override
   Widget build(BuildContext context) {
+    User user = context.watch<UserHelper>().user;
+    print(_genderValue);
     return Scaffold(
       appBar: getEditProfileAppScreenAppBar(context),
       body: SingleChildScrollView(
@@ -62,7 +53,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 child: Column(
                   children: [
                     TextFormField(
-                      initialValue: _name,
+                      initialValue: user.name,
                       textCapitalization: TextCapitalization.none,
                       autofocus: false,
                       key: ValueKey("Name"),
@@ -79,18 +70,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       height: 10,
                     ),
                     TextFormField(
-                      initialValue: _email,
+                      enabled: false,
+                      initialValue: user.email,
                       textCapitalization: TextCapitalization.none,
                       autofocus: false,
                       key: ValueKey("Email"),
-                      keyboardType: TextInputType.name,
+                      keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(labelText: "Email"),
-                      validator: (value) {
-                        return validateNameTextFormField(value);
-                      },
-                      onSaved: (value) {
-                        _email = value;
-                      },
+                      validator: null,
+                      onSaved: null,
                     ),
                     SizedBox(
                       height: 20,
@@ -106,7 +94,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     InputLocation(_setLocation),
                     SizedBox(height: 20),
                     updateProfileButton(
-                        onPressed: _onFormSubmitted, isLoading: _isLoading),
+                        onPressed: () => _onFormSubmitted(user),
+                        isLoading: _isLoading),
                     SizedBox(
                       height: 40,
                     ),
@@ -151,14 +140,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   void _resetPassword() {
-    UserAuth.resetPassword(_email);
+    UserAuth.resetPassword(UserAuth.user.email);
     showDialog(
         context: context,
         builder: (context) => AlertDialogBox(
               title: "Reset Your Password",
               context: context,
               message:
-                  "An email has been sent on $_email Reset your password from there and try again",
+                  "An email has been sent on ${UserAuth.user.email} Reset your password from there and try again",
               buttonText: "Close",
             ));
   }
@@ -167,8 +156,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _location = await getLocationAddress(coordinates);
   }
 
-  void _onFormSubmitted() async {
-    User _activeUser = activeUser;
+  void _onFormSubmitted(User user) async {
     _changeIsLoadingState();
     final formIsValid = _formKey.currentState.validate();
     if (!formIsValid) {
@@ -176,31 +164,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       return;
     }
     _formKey.currentState.save();
-    bool emailIsUpdated = _email != _activeUser.email;
-    if (emailIsUpdated) {
-      _emailIsUpdated();
-    }
-
-    if (_isFormUpdated()) {
-      _formIsUpdated(_activeUser);
+    if (_isFormUpdated(user)) {
+      _formIsUpdated(user);
     } else {
       _changeIsLoadingState();
     }
 
     Navigator.of(context).pop();
-  }
-
-  void _emailIsUpdated() {
-    UserAuth.updateEmail(_email);
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialogBox(
-              title: "Verify your email",
-              context: context,
-              message:
-                  "Verification email sent on $_email Verify your email then SignIn",
-              buttonText: "Close",
-            ));
   }
 
   void _formIsUpdated(User _activeUser) {
@@ -209,20 +179,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _activeUser.address = _location;
     if (_image != null) {
       String photoUrl;
-      FireStorage.updateProfilePicture(_image)
-          .then((value) => photoUrl = value);
+      FireStorage.updateProfilePicture(_image).then((value) {
+        print(value);
+        photoUrl = value;
+      });
       _activeUser.photoUrl = photoUrl;
     }
-    updateUser(_activeUser, context);
+    context.read<UserHelper>().updateUser(_activeUser, context);
     _changeIsLoadingState();
   }
 
-  bool _isFormUpdated() {
-    User user = activeUser;
-    if (_name != user.name ||
-        _email != user.email ||
-        _location.equals(user.address) ||
-        _genderValue != user.gender ||
+  bool _isFormUpdated(User user) {
+    print(user.address);
+    if (_name != user?.name ||
+        _location.equals(user?.address) ||
+        _genderValue != user?.gender ||
         _image != null) {
       return true;
     }
@@ -230,8 +201,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   void _changeIsLoadingState() {
-    setState(() {
-      _isLoading = !_isLoading;
-    });
+    setState(() => _isLoading = !_isLoading);
   }
 }

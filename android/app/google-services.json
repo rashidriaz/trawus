@@ -1,20 +1,20 @@
 {
   "project_info": {
-    "project_number": "212620929506",
-    "project_id": "trawus-68bd0",
-    "storage_bucket": "trawus-68bd0.appspot.com"
+    "project_number": "340958536991",
+    "project_id": "trawus2021",
+    "storage_bucket": "trawus2021.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:212620929506:android:958c06395bfd0d4cb171bb",
+        "mobilesdk_app_id": "1:340958536991:android:de8f0bf04cfe2dcc7b3c2a",
         "android_client_info": {
           "package_name": "com.example.trawus"
         }
       },
       "oauth_client": [
         {
-          "client_id": "212620929506-a0av7hv2u5efflp73s81aqabu6bsrjne.apps.googleusercontent.com",
+          "client_id": "340958536991-0j5ugkeuhcvrhbreh54tf59aci2erlrt.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.trawus",
@@ -22,20 +22,20 @@
           }
         },
         {
-          "client_id": "212620929506-nv7fdb5b0pfms443n2v204287p98bup1.apps.googleusercontent.com",
+          "client_id": "340958536991-bloakcmohtrossji9pp6j842jjoq08l2.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDxoUA9NJZ55WhCD06WZ0UhHvynl6IN0MY"
+          "current_key": "AIzaSyABl6xZAdnMBqirQ7RJ5k_Xnq_x0zgsAA4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "212620929506-nv7fdb5b0pfms443n2v204287p98bup1.apps.googleusercontent.com",
+              "client_id": "340958536991-bloakcmohtrossji9pp6j842jjoq08l2.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -116,8 +116,4 @@ class UserAuth {
     FirebaseAuth.instance.currentUser
         .updateProfile(displayName: name, photoURL: photoUrl);
   }
-
-  static void updateEmail(String email){
-    FirebaseAuth.instance.currentUser.verifyBeforeUpdateEmail(email);
-  }
 }

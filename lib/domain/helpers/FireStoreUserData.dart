@@ -8,12 +8,7 @@ class FireStoreUserData {
   FireStoreUserData(this.gender, this.address);
 
   static FireStoreUserData fromJson(Map<String, dynamic> data) {
-    Coordinates coordinates =
-        Coordinates(longitude: data['longitude'], latitude: data['latitude']);
-    LocationAddress address = LocationAddress(
-        coordinates: coordinates,
-        streetAddress: data['streetAddress'],
-        city: data['city']);
+    LocationAddress address = LocationAddress.fromJSON(data['address']);
     return FireStoreUserData(data['gender'], address);
   }
 }

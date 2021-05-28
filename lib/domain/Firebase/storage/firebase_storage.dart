@@ -10,7 +10,12 @@ class FireStorage {
         .child("profile_photos")
         .child(UserAuth.user.uid.toString())
         .child('dp.jpg');
-    await reference.putFile(image);
+    ;
+    try {
+      await reference.putFile(image);
+    } catch (e) {
+      print(e.toString());
+    }
     String url = await reference.getDownloadURL();
     return url;
   }
