@@ -1,5 +1,6 @@
+
 import 'package:flutter/material.dart';
-import 'package:trawus/domain/helpers/user_helper.dart';
+import 'package:trawus/Models/user.dart';
 import 'package:trawus/presentation/screens/profile_screen/widgets/profile_picture_avatar.dart';
 
 Container displayCaptionText(String text) {
@@ -34,11 +35,11 @@ Container displayContentText(String content) {
   ));
 }
 
-IntrinsicHeight displayBasicInfo() {
+IntrinsicHeight displayBasicInfo(User user) {
   return IntrinsicHeight(
     child: Row(
       children: [
-        ProfilePhotoAvatar(),
+        ProfilePhotoAvatar(user.photoUrl),
         VerticalDivider(
           color: Colors.black26,
         ),
@@ -49,11 +50,11 @@ IntrinsicHeight displayBasicInfo() {
             SizedBox(
               height: 20,
             ),
-            displayContentText(activeUser.name),
+            displayContentText(user.name),
             SizedBox(
               height: 20,
             ),
-            displayContentText(activeUser.email),
+            displayContentText(user.email),
           ],
         ),
       ],

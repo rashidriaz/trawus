@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:trawus/domain/helpers/user_helper.dart';
 
 class ProfilePhotoAvatar extends StatelessWidget {
-
+final String imageUrl;
+ProfilePhotoAvatar(this.imageUrl);
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +15,8 @@ class ProfilePhotoAvatar extends StatelessWidget {
         color: Colors.grey,
         shape: BoxShape.circle,
         image: DecorationImage(
-            image: activeUser.photoUrl == null? AssetImage("assets/images/no_dp.jpg"):
-            NetworkImage(activeUser.photoUrl),
+            image: imageUrl == null? AssetImage("assets/images/no_dp.jpg"):
+            NetworkImage(imageUrl),
             fit: BoxFit.fill
         ),
       ),

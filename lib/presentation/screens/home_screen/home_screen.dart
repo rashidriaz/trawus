@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trawus/domain/Firebase/auth/user_authentications.dart';
+import 'package:trawus/presentation/screens/account_screen/account_screen.dart';
 import 'package:trawus/presentation/screens/home_screen/components/bottom_navigation_bar.dart';
 import 'package:trawus/presentation/screens/profile_screen/profile_screen.dart';
 
@@ -22,15 +23,16 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: homeScreenAppBar(),
-      body: _bottomNavigationBarIndexNumber == 0? Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        child: Column(
-          children: [
-          ],
-        ),
-      ): ProfileScreen(),
-
-      floatingActionButton: _bottomNavigationBarIndexNumber == 0 ? searchButton(): null,
+      body: _bottomNavigationBarIndexNumber == 0
+          ? Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: Column(
+                children: [],
+              ),
+            )
+          : ProfileScreen(),
+      floatingActionButton:
+          _bottomNavigationBarIndexNumber == 0 ? searchButton() : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: _bottomNavigationBar(),
     );
@@ -42,18 +44,19 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedIndex: _bottomNavigationBarIndexNumber);
   }
 
-  FloatingActionButton searchButton(){
+  FloatingActionButton searchButton() {
     return FloatingActionButton(
       child: Icon(Icons.search),
-      onPressed: (){
+      onPressed: () {
         UserAuth.signOut();
+        Navigator.of(context).popAndPushNamed(Account.routeName);
       },
-
     );
   }
+
   void _changeBottomNavigationBarIndexNumber(int index) {
     setState(() {
       _bottomNavigationBarIndexNumber = index;
     });
   }
-}// HomeScreenState
+} // HomeScreenState

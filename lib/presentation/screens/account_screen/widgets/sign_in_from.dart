@@ -91,8 +91,9 @@ class _SignInFormState extends State<SignInForm> {
                   onPressed: () {},
                   context: context);
             });
+      } else {
+        Navigator.of(context).popAndPushNamed(HomeScreen.routeName);
       }
-      Navigator.of(context).popAndPushNamed(HomeScreen.routeName);
       changeIsLoadingStatus();
     }
   }

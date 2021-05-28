@@ -5,10 +5,8 @@ import 'package:geocode/geocode.dart';
 import 'package:trawus/Models/gender.dart';
 import 'package:trawus/Models/location_address.dart';
 import 'package:trawus/Models/user.dart';
-import 'package:trawus/domain/Firebase/firestore/firestore.dart';
 import 'package:trawus/domain/Firebase/storage/firebase_storage.dart';
 import 'package:trawus/domain/helpers/geocode_helper.dart';
-import 'package:trawus/domain/helpers/provider/user_provider.dart';
 import 'package:trawus/domain/helpers/user_helper.dart';
 import '../../../domain/Firebase/auth/user_authentications.dart';
 import 'package:trawus/presentation/screens/edit_profile_screen/components/edit_profile_app_screen_app_bar.dart';
@@ -16,7 +14,6 @@ import 'package:trawus/presentation/screens/edit_profile_screen/widgets/gender_i
 import 'package:trawus/presentation/screens/edit_profile_screen/widgets/location_input.dart';
 import 'package:trawus/presentation/screens/edit_profile_screen/widgets/update_button.dart';
 import 'package:trawus/presentation/widget/alert_dialog.dart';
-import 'package:provider/provider.dart';
 import '../../../validations.dart';
 import 'widgets/image_picker.dart';
 
@@ -35,13 +32,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   String _email;
   LocationAddress _location;
   File _image;
-  String _genderValue = Gender.doNotSpecify;
+  String _genderValue;
   bool _isLoading = false;
-
 
   @override
   void initState() {
-
+    super.initState();
+    User user = activeUser;
+    _name = user.name ?? ' ';
+    _email = user.email ?? ' ';
+    _location = user.address ?? LocationAddress.defaultAddress;
+    _genderValue = user.gender ?? Gender.doNotSpecify;
   }
 
   @override
@@ -55,13 +56,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           alignment: Alignment.center,
           child: Column(
             children: [
-              UserImagePicker(setImage, activeUser.photoUrl),
+              UserImagePicker(setImage, UserAuth.user.photoURL),
               Form(
                 key: _formKey,
                 child: Column(
                   children: [
                     TextFormField(
-                      initialValue: activeUser.name,
+                      initialValue: _name,
                       textCapitalization: TextCapitalization.none,
                       autofocus: false,
                       key: ValueKey("Name"),
@@ -78,7 +79,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       height: 10,
                     ),
                     TextFormField(
-                      initialValue: activeUser.email,
+                      initialValue: _email,
                       textCapitalization: TextCapitalization.none,
                       autofocus: false,
                       key: ValueKey("Email"),
@@ -150,14 +151,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   void _resetPassword() {
-    UserAuth.resetPassword("rashidriax0@gmail.com");
+    UserAuth.resetPassword(_email);
     showDialog(
         context: context,
         builder: (context) => AlertDialogBox(
               title: "Reset Your Password",
               context: context,
               message:
-                  "An email has been sent on ${activeUser.email} Reset your password from there and try again",
+                  "An email has been sent on $_email Reset your password from there and try again",
               buttonText: "Close",
             ));
   }
@@ -167,6 +168,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   void _onFormSubmitted() async {
+    User _activeUser = activeUser;
     _changeIsLoadingState();
     final formIsValid = _formKey.currentState.validate();
     if (!formIsValid) {
@@ -174,35 +176,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       return;
     }
     _formKey.currentState.save();
-    bool emailIsUpdated = _email != activeUser.email;
+    bool emailIsUpdated = _email != _activeUser.email;
     if (emailIsUpdated) {
-      UserAuth.updateEmail(_email);
-      showDialog(
-          context: context,
-          builder: (context) => AlertDialogBox(
-                title: "Verify your email",
-                context: context,
-                message:
-                    "Verification email sent on $_email Verify your email then SignIn",
-                buttonText: "Close",
-              ));
+      _emailIsUpdated();
     }
 
     if (_isFormUpdated()) {
-      User user = context.read<UserProvider>().user;
-      user.name = _name;
-      user.gender = _genderValue;
-      user.address = _location;
-      if (_image != null) {
-        String photoUrl;
-        FireStorage.updateProfilePicture(_image)
-            .then((value) => photoUrl = value);
-        user.photoUrl = photoUrl;
-      }
-      FireStore.updateUserData(user: user);
-      UserAuth.updateProfile(name: user.name, photoUrl: user.photoUrl);
-      _changeIsLoadingState();
-      context.watch<UserProvider>().updateUser(user);
+      _formIsUpdated(_activeUser);
     } else {
       _changeIsLoadingState();
     }
@@ -210,8 +190,35 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     Navigator.of(context).pop();
   }
 
+  void _emailIsUpdated() {
+    UserAuth.updateEmail(_email);
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialogBox(
+              title: "Verify your email",
+              context: context,
+              message:
+                  "Verification email sent on $_email Verify your email then SignIn",
+              buttonText: "Close",
+            ));
+  }
+
+  void _formIsUpdated(User _activeUser) {
+    _activeUser.name = _name;
+    _activeUser.gender = _genderValue;
+    _activeUser.address = _location;
+    if (_image != null) {
+      String photoUrl;
+      FireStorage.updateProfilePicture(_image)
+          .then((value) => photoUrl = value);
+      _activeUser.photoUrl = photoUrl;
+    }
+    updateUser(_activeUser, context);
+    _changeIsLoadingState();
+  }
+
   bool _isFormUpdated() {
-    User user = context.read<UserProvider>().user;
+    User user = activeUser;
     if (_name != user.name ||
         _email != user.email ||
         _location.equals(user.address) ||

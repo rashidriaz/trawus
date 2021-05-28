@@ -3,8 +3,7 @@ import 'package:geocode/geocode.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:trawus/domain/helpers/geocode_helper.dart';
 import 'package:trawus/domain/helpers/google_maps_helper.dart';
-import 'package:trawus/domain/helpers/provider/user_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:trawus/domain/helpers/user_helper.dart';
 import 'package:trawus/presentation/screens/map_screen/map_screen.dart';
 
 class InputLocation extends StatefulWidget {
@@ -22,7 +21,7 @@ class _InputLocationState extends State<InputLocation> {
   @override
   Widget build(BuildContext context) {
     if(_previewImageUrl ==null){
-      _showPreview(context.read<UserProvider>().user.address.coordinates);
+      _showPreview(activeUser.address.coordinates);
     }
     return Column(
       children: [
