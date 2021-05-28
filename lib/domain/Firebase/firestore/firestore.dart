@@ -23,15 +23,22 @@ class FireStore {
     });
   }
 
-  static Map<String, dynamic> getUserDataFromFireStore() {
+  static Future<Map<String, dynamic>> getUserDataFromFireStore() async {
     final fireStoreInstance = FirebaseFirestore.instance;
+    print(FirebaseFirestore.instance.app.name);
     final id = UserAuth.userId;
     Map<String, dynamic> data;
-    final xyz = fireStoreInstance.collection('users').doc(id);
-    xyz.get().then((value) {
-      data = value.data();
-      print(value.toString());
+    final xyz = await fireStoreInstance
+        .collection('users')
+        .doc(id)
+        .get()
+        .onError((error, stackTrace) {
+      print(error.toString());
+      return null;
     });
+    data = xyz.data();
+    print(xyz.toString());
+
     return data;
   }
 }

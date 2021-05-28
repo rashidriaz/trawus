@@ -5,11 +5,14 @@ import 'package:trawus/Models/user.dart';
 import 'package:trawus/domain/Firebase/auth/user_authentications.dart';
 import 'package:trawus/domain/Firebase/firestore/firestore.dart';
 import 'FireStoreUserData.dart';
+
 class UserHelper with ChangeNotifier {
   User user;
-  UserHelper(){
+
+  UserHelper() {
     user = activeUser;
   }
+
   Future<void> updateUser(User user, BuildContext context) async {
     try {
       UserAuth.updateProfile(name: user.name, photoUrl: user.photoUrl);
@@ -20,17 +23,16 @@ class UserHelper with ChangeNotifier {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(error.toString()),
-          backgroundColor: Theme
-              .of(context)
-              .errorColor,
+          backgroundColor: Theme.of(context).errorColor,
         ),
       );
     }
   }
 
   User get activeUser {
-    Map<String, dynamic> userDataFromFireStore =
-    FireStore.getUserDataFromFireStore();
+    Map<String, dynamic> userDataFromFireStore;
+    FireStore.getUserDataFromFireStore()
+        .then((value) => userDataFromFireStore = value);
     FireStoreUserData userData;
     if (userDataFromFireStore != null) {
       userData = FireStoreUserData.fromJson(userDataFromFireStore);
