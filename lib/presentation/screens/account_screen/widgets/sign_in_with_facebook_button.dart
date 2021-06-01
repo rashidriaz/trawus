@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trawus/constants.dart';
 import 'package:trawus/presentation/widget/alert_dialog.dart';
 import 'package:trawus/presentation/widget/image_button.dart';
 
@@ -19,7 +20,7 @@ class _SignInWithFacebookButtonState extends State<SignInWithFacebookButton> {
         : ImageButton(
             onPressed: signInWithFacebook,
             caption: "Sign in with Facebook",
-            imageUrl: "assets/images/facebook.png",
+            imageUrl: facebookLogo,
           );
   }
 

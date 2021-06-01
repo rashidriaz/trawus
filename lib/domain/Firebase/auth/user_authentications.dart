@@ -111,9 +111,17 @@ class UserAuth {
     return FirebaseAuth.instance.currentUser != null;
   }
 
-  static void updateProfile(
-      {@required String name, @required String photoUrl}) {
-    FirebaseAuth.instance.currentUser
-        .updateProfile(displayName: name, photoURL: photoUrl);
+  static Future<void> updateProfile(
+      {@required String name, @required String photoUrl}) async {
+    try {
+      await FirebaseAuth.instance.currentUser
+          .updateProfile(displayName: name, photoURL: photoUrl)
+          .onError((error, stackTrace) {
+        print(error.toString());
+        print(stackTrace);
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 }

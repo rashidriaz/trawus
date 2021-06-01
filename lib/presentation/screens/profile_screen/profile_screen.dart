@@ -4,6 +4,7 @@ import 'package:trawus/presentation/screens/profile_screen/widgets/user_info.dar
 class ProfileScreen extends StatelessWidget {
   static const routeName = "/user/ProfileScreen";
 
+
   @override
   Widget build(BuildContext context) {
     return Padding(

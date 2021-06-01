@@ -3,6 +3,7 @@ import 'package:trawus/presentation/screens/account_screen/components/create_use
 import '../../../../domain/Firebase/auth/user_authentications.dart';
 import 'package:trawus/presentation/screens/home_screen/home_screen.dart';
 import 'package:trawus/presentation/widget/image_button.dart';
+import 'package:trawus/constants.dart';
 
 class SignInWithGoogleButton extends StatefulWidget {
   @override
@@ -21,7 +22,7 @@ class _SignInWithGoogleButtonState extends State<SignInWithGoogleButton> {
         : ImageButton(
             onPressed: signInWithGoogle,
             caption: "Sign in with Google",
-            imageUrl: "assets/images/google.png",
+            imageUrl: googleLogo,
           );
   }
 

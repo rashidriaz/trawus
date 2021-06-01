@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:trawus/constants.dart';
 
 class UserImagePicker extends StatefulWidget {
   final Function(File image) setImageFunction;
@@ -24,7 +25,7 @@ class _UserImagePickerState extends State<UserImagePicker> {
         CircleAvatar(
           backgroundImage: _pickedImage == null
               ? widget.imageUrl == null
-                  ? AssetImage("assets/images/no_dp.jpg")
+                  ? AssetImage(noProfilePhoto)
                   : NetworkImage(widget.imageUrl)
               : FileImage(_pickedImage),
           radius: 50,

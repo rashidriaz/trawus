@@ -7,6 +7,17 @@ const kRatingStarColor = Color(0XFFF4D150);
 const kInputBackgroundColor = Color(0XFFF3F3F3);
 const kPrimaryLightColor = Color(0XFF897CFF);
 
+
 // const ThemeData themeData = ThemeData(
 //
 // );
+
+
+//Image references
+
+const errorImage = "assets/images/error_icon.png";
+const googleLogo = "assets/images/google.png";
+const facebookLogo = "assets/images/facebook.png";
+const mainLogo = "assets/images/main_logo.png";
+const noProfilePhoto = "assets/images/no_dp.jpg";
+const detailedLogo = "assets/images/detailed_logo.png";

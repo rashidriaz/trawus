@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:geocode/geocode.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:provider/provider.dart';
+import 'package:trawus/Models/user.dart';
 import 'package:trawus/domain/helpers/geocode_helper.dart';
 import 'package:trawus/domain/helpers/google_maps_helper.dart';
-import 'package:trawus/domain/helpers/user_helper.dart';
 import 'package:trawus/presentation/screens/map_screen/map_screen.dart';
 
 class InputLocation extends StatefulWidget {
   final Function onSelectPlace;
+  User user;
 
-  InputLocation(this.onSelectPlace);
+  InputLocation(this.onSelectPlace, this.user);
 
   @override
   _InputLocationState createState() => _InputLocationState();
@@ -22,7 +22,7 @@ class _InputLocationState extends State<InputLocation> {
   @override
   Widget build(BuildContext context) {
     if(_previewImageUrl ==null){
-      _showPreview(context.watch<UserHelper>().user.address.coordinates);
+      _showPreview(widget.user.address.coordinates);
     }
     return Column(
       children: [

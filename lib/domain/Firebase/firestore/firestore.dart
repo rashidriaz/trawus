@@ -25,20 +25,36 @@ class FireStore {
 
   static Future<Map<String, dynamic>> getUserDataFromFireStore() async {
     final fireStoreInstance = FirebaseFirestore.instance;
-    print(FirebaseFirestore.instance.app.name);
     final id = UserAuth.userId;
     Map<String, dynamic> data;
-    final xyz = await fireStoreInstance
-        .collection('users')
-        .doc(id)
-        .get()
-        .onError((error, stackTrace) {
-      print(error.toString());
-      return null;
-    });
-    data = xyz.data();
-    print(xyz.toString());
+    try {
+      final xyz = await fireStoreInstance
+          .collection('users')
+          .doc(id)
+          .get()
+          .onError((error, stackTrace) {
+        print(error.toString());
+        return null;
+      });
+      data = xyz.data();
 
-    return data;
+      return data;
+    } catch (e) {
+      print(e.toString());
+      print(e.stack);
+    }
+  }
+
+  static Future<bool> userExists(String uid) async {
+    final fireStoreInstance = FirebaseFirestore.instance;
+      final userData = await fireStoreInstance
+          .collection('users')
+          .doc(uid)
+          .get()
+          .onError((error, stackTrace) {
+        print(error.toString());
+        return null;
+      });
+      return userData.data() != null;
   }
 }

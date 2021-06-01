@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:trawus/constants.dart';
 
 class MainLogo extends StatelessWidget {
   const MainLogo();
@@ -12,7 +13,7 @@ class MainLogo extends StatelessWidget {
       alignment: Alignment.center,
       padding: EdgeInsets.fromLTRB(0, 40, 0, 15),
       child: Image.asset(
-        'assets/images/main_logo.png',
+        mainLogo,
         fit: BoxFit.fill,
         height: 90,
         width: MediaQuery.of(context).size.width *

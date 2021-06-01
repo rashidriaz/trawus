@@ -5,6 +5,10 @@ import 'package:trawus/domain/Firebase/auth/user_authentications.dart';
 import 'package:trawus/domain/Firebase/firestore/firestore.dart';
 
 Future<void> createUserInFireStore(String email) async {
+  bool userExists = await FireStore.userExists(UserAuth.userId);
+  if(userExists){
+    return;
+  }
   User user = User(
       email: email,
       gender: Gender.doNotSpecify,

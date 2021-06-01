@@ -8,9 +8,8 @@ class FireStorage {
     final reference = FirebaseStorage.instance
         .ref()
         .child("profile_photos")
-        .child(UserAuth.user.uid.toString())
+        .child(UserAuth.userId.toString())
         .child('dp.jpg');
-    ;
     try {
       await reference.putFile(image);
     } catch (e) {
