@@ -78,7 +78,13 @@ class _SignInFormState extends State<SignInForm> {
       changeIsLoadingStatus();
       await UserAuth.authenticate(
           email: email, password: password, context: context, signIn: true);
-      if (!UserAuth.emailVerified()) {
+
+      if (UserAuth.user == null) {
+        changeIsLoadingStatus();
+        return;
+      }
+      // ignore: null_aware_in_logical_operator
+      if (!UserAuth?.emailVerified()) {
         UserAuth.signOut();
         showDialog(
             context: context,
@@ -92,7 +98,7 @@ class _SignInFormState extends State<SignInForm> {
                   context: context);
             });
       } else {
-        Navigator.of(context).popAndPushNamed(HomeScreen.routeName);
+        Navigator.of(context).popAndPushNamed(HomeScreen.routeName, arguments: false);
       }
       changeIsLoadingStatus();
     }

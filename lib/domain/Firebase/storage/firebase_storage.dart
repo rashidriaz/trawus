@@ -9,6 +9,7 @@ class FireStorage {
         .ref()
         .child("profile_photos")
         .child(UserAuth.userId.toString())
+        .child(DateTime.now().toString())
         .child('dp.jpg');
     try {
       await reference.putFile(image);

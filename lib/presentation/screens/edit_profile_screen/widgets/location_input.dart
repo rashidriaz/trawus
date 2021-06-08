@@ -6,6 +6,8 @@ import 'package:trawus/domain/helpers/geocode_helper.dart';
 import 'package:trawus/domain/helpers/google_maps_helper.dart';
 import 'package:trawus/presentation/screens/map_screen/map_screen.dart';
 
+import '../../../../constants.dart';
+
 class InputLocation extends StatefulWidget {
   final Function onSelectPlace;
   User user;
@@ -53,7 +55,7 @@ class _InputLocationState extends State<InputLocation> {
               ),
               label: Text(
                 'Current Location',
-                style: TextStyle(color: Colors.indigo),
+                style: TextStyle(color: primaryColor),
               ),
               onPressed: _getCurrentUserLocation,
             ),
@@ -63,7 +65,7 @@ class _InputLocationState extends State<InputLocation> {
               ),
               label: Text(
                 'Select on Map',
-                style: TextStyle(color: Colors.indigo),
+                style: TextStyle(color: primaryColor),
               ),
               onPressed: _selectOnMap,
             ),

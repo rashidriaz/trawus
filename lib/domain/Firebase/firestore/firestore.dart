@@ -43,18 +43,19 @@ class FireStore {
       print(e.toString());
       print(e.stack);
     }
+    return null;
   }
 
   static Future<bool> userExists(String uid) async {
     final fireStoreInstance = FirebaseFirestore.instance;
-      final userData = await fireStoreInstance
-          .collection('users')
-          .doc(uid)
-          .get()
-          .onError((error, stackTrace) {
-        print(error.toString());
-        return null;
-      });
-      return userData.data() != null;
+    final userData = await fireStoreInstance
+        .collection('users')
+        .doc(uid)
+        .get()
+        .onError((error, stackTrace) {
+      print(error.toString());
+      return null;
+    });
+    return userData.data() != null;
   }
 }

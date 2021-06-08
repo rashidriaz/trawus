@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../constants.dart';
+
 BottomNavigationBar bottomNavigationBar(
     {@required int selectedIndex, @required Function onTap}) {
   return BottomNavigationBar(
@@ -8,12 +10,12 @@ BottomNavigationBar bottomNavigationBar(
     enableFeedback: true,
     items: const <BottomNavigationBarItem>[
       BottomNavigationBarItem(
-        backgroundColor: Colors.indigo,
+        backgroundColor: primaryColor,
         icon: Icon(Icons.home),
         label: 'Home',
       ),
       BottomNavigationBarItem(
-        backgroundColor: Colors.indigo,
+        backgroundColor: primaryColor,
         icon: Icon(Icons.person_sharp),
         label: 'Profile',
       ),

@@ -1,16 +1,16 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:trawus/domain/Firebase/auth/user_authentications.dart';
-import 'package:trawus/domain/helpers/user_helper.dart';
-import 'package:trawus/presentation/screens/account_screen/account_screen.dart';
+import 'package:trawus/components/nothing_to_show_screen.dart';
+import 'package:trawus/presentation/screens/add_new_product_screen/add_new_product_screen.dart';
 import 'package:trawus/presentation/screens/home_screen/components/bottom_navigation_bar.dart';
+import 'package:trawus/presentation/screens/home_screen/components/home_screen_app_bar.dart';
 import 'package:trawus/presentation/screens/profile_screen/profile_screen.dart';
 
-import 'components/home_screen_app_bar.dart';
+import '../../../constants.dart';
 
+// ignore: must_be_immutable
 class HomeScreen extends StatefulWidget {
   static const routeName = '/homeScreen';
+  bool firstTime = true;
 
   @override
   _HomeScreenState createState() {
@@ -23,22 +23,25 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.firstTime) {
+      widget.firstTime = false;
+      bool goToTheProfileScreen =
+          ModalRoute.of(context).settings.arguments as bool ?? false;
+      if (goToTheProfileScreen) {
+        _bottomNavigationBarIndexNumber = 1;
+      }
+    }
     return Scaffold(
-      appBar: homeScreenAppBar(),
+      appBar: homeScreenAppBar(
+          context: context, index: _bottomNavigationBarIndexNumber),
       body: _bottomNavigationBarIndexNumber == 0
           ? Padding(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Column(
-                children: [],
-              ),
+              child: nothingToShowOnScreen(),
             )
-          : Consumer<UserHelper>(
-              builder: (context, _, _a) {
-                return ProfileScreen();
-              },
-            ),
+          : ProfileScreen(),
       floatingActionButton:
-          _bottomNavigationBarIndexNumber == 0 ? searchButton() : null,
+          _bottomNavigationBarIndexNumber == 0 ? addButton() : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: _bottomNavigationBar(),
     );
@@ -50,12 +53,11 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedIndex: _bottomNavigationBarIndexNumber);
   }
 
-  FloatingActionButton searchButton() {
+  FloatingActionButton addButton() {
     return FloatingActionButton(
-      child: Icon(Icons.search),
+      child: Icon(Icons.add),
       onPressed: () {
-        UserAuth.signOut();
-        Navigator.of(context).popAndPushNamed(Account.routeName);
+        Navigator.of(context).pushNamed(AddNewProductScreen.routeName);
       },
     );
   }

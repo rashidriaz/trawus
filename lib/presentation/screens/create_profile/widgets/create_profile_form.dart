@@ -1,38 +1,43 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geocode/geocode.dart';
 import 'package:trawus/Models/location_address.dart';
 import 'package:trawus/Models/user.dart';
-import 'package:trawus/components/error_screen.dart';
+import 'package:trawus/domain/Firebase/auth/user_authentications.dart';
 import 'package:trawus/domain/Firebase/storage/firebase_storage.dart';
 import 'package:trawus/domain/helpers/geocode_helper.dart';
 import 'package:trawus/domain/helpers/user_helper.dart';
-import 'package:trawus/presentation/screens/home_screen/home_screen.dart';
-import '../../../domain/Firebase/auth/user_authentications.dart';
-import 'package:trawus/presentation/screens/edit_profile_screen/components/edit_profile_app_screen_app_bar.dart';
+import 'package:trawus/presentation/screens/account_screen/account_screen.dart';
+import 'package:trawus/presentation/screens/edit_profile_screen/components/text_field_validator.dart';
 import 'package:trawus/presentation/screens/edit_profile_screen/widgets/gender_input.dart';
+import 'package:trawus/presentation/screens/edit_profile_screen/widgets/image_picker.dart';
 import 'package:trawus/presentation/screens/edit_profile_screen/widgets/location_input.dart';
 import 'package:trawus/presentation/screens/edit_profile_screen/widgets/update_button.dart';
+import 'package:trawus/presentation/screens/home_screen/home_screen.dart';
 import 'package:trawus/presentation/widget/alert_dialog.dart';
-import 'components/text_field_validator.dart';
-import 'widgets/image_picker.dart';
 
 // ignore: must_be_immutable
-class EditProfileScreen extends StatefulWidget {
-  static const routeName = "/User/EditUserProfileScreen";
+class CreateProfileForm extends StatefulWidget {
   User user;
   LocationAddress _location;
   String _genderValue;
-  bool firstTime = true;
+  bool calledAfterSignInWithGoogle;
+
+  CreateProfileForm(User user, this.calledAfterSignInWithGoogle) {
+    this.user = user;
+    _location = user.address;
+    _genderValue = user.gender;
+  }
 
   @override
-  _EditProfileScreenState createState() {
-    return _EditProfileScreenState();
+  _CreateProfileFormState createState() {
+    return _CreateProfileFormState();
   }
 }
 
-class _EditProfileScreenState extends State<EditProfileScreen> {
+class _CreateProfileFormState extends State<CreateProfileForm> {
   final _formKey = GlobalKey<FormState>();
   String _name;
   File _image;
@@ -40,17 +45,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.firstTime) {
-      widget.firstTime = false;
-      widget.user = ModalRoute.of(context).settings.arguments as User;
-      widget._location = widget.user.address;
-      widget._genderValue = widget.user.gender;
-    }
-    if (widget.user == null) {
-      return errorScreen(context);
-    }
     return Scaffold(
-      appBar: getEditProfileAppScreenAppBar(context),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(
             horizontal: MediaQuery.of(context).size.width * 0.05, vertical: 20),
@@ -58,6 +53,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           alignment: Alignment.center,
           child: Column(
             children: [
+              const SizedBox(
+                height: 50,
+              ),
               UserImagePicker(setImage, UserAuth.user.photoURL),
               Form(
                 key: _formKey,
@@ -90,10 +88,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              resetPasswordButton(),
             ],
           ),
         ),
@@ -122,9 +116,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
     _changeIsLoadingState();
 
-    Navigator.pop(context);
-    Navigator.of(context)
-        .pushNamedAndRemoveUntil(HomeScreen.routeName, (route) => false, arguments: true);
+    if (widget.calledAfterSignInWithGoogle) {
+      Navigator.of(context).pushReplacementNamed(HomeScreen.routeName, arguments: false);
+      return;
+    }
+    UserAuth.signOut();
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialogBox(
+              title: "Verify your email",
+              context: context,
+              message:
+                  "Verification email sent on ${user.email} Verify your email then SignIn",
+              buttonText: "Go to SignIn Screen",
+              onPressed: () =>
+                  Navigator.of(context).pushReplacementNamed(Account.routeName),
+            ));
   }
 
   Future<void> _updateUser(User _activeUser) async {
@@ -135,7 +142,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       String photoUrl = await FireStorage.updateProfilePicture(_image);
       _activeUser.photoUrl = photoUrl;
     }
-
     UserHelper().updateUser(_activeUser, context);
     _changeIsLoadingState();
   }
@@ -183,34 +189,5 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       validator: null,
       onSaved: null,
     );
-  }
-
-  Widget resetPasswordButton() {
-    return SizedBox(
-      width: double.infinity,
-      child: OutlinedButton(
-        child: Text(
-          "Change Password",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        onPressed: !_isLoading ? _resetPassword : null,
-      ),
-    );
-  }
-
-  void _resetPassword() {
-    UserAuth.resetPassword(UserAuth.user.email);
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialogBox(
-              title: "Reset Your Password",
-              context: context,
-              message:
-                  "An email has been sent on ${UserAuth.user.email} Reset your password from there and try again",
-              buttonText: "Close",
-            ));
   }
 }

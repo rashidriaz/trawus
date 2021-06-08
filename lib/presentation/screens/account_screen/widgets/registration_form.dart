@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:trawus/presentation/screens/account_screen/components/create_user_in_firestore.dart';
+import 'package:trawus/presentation/screens/create_profile/new_profile_screen.dart';
 import '../../../../domain/Firebase/auth/user_authentications.dart';
 import 'package:trawus/presentation/screens/account_screen/components/email_text_form_field.dart';
 import 'package:trawus/presentation/screens/account_screen/components/password_text_form_field.dart';
 import 'package:trawus/presentation/screens/account_screen/components/submit_form_button.dart';
 import 'package:trawus/presentation/screens/account_screen/components/toggle_signin_and_register_form_button.dart';
-import '../../../widget/alert_dialog.dart';
 
 class RegistrationForm extends StatefulWidget {
   final Function(bool isSignIn) changeSignInState;
@@ -83,23 +83,18 @@ class _RegistrationFormState extends State<RegistrationForm> {
       _changeIsLoadingStatus();
       await UserAuth.authenticate(
           email: email, password: password, context: context);
-      String userID = UserAuth.user.uid.toString();
-      _changeIsLoadingStatus();
+      if (UserAuth.user == null) {
+        _changeIsLoadingStatus();
+        return;
+      }
+      String userID = UserAuth.userId;
       if (userID != null) {
         createUserInFireStore(email);
-        showDialog(
-            context: context,
-            builder: (context) => AlertDialogBox(
-                  title: "Verify your email",
-                  context: context,
-                  message:
-                      "Verification email sent on $email Verify your email then SignIn",
-                  buttonText: "Go to SignIn Screen",
-                  onPressed: _renderSignInForm,
-                ));
+        _formKey.currentState.reset();
+        Navigator.of(context)
+            .pushReplacementNamed(NewProfileScreen.routeName, arguments: false);
       }
     }
-    _formKey.currentState.reset();
   }
 
   void _changeIsLoadingStatus() {

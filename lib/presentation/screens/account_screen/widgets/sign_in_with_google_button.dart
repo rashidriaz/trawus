@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:trawus/domain/Firebase/firestore/firestore.dart';
 import 'package:trawus/presentation/screens/account_screen/components/create_user_in_firestore.dart';
-import '../../../../domain/Firebase/auth/user_authentications.dart';
+import 'package:trawus/presentation/screens/create_profile/new_profile_screen.dart';
 import 'package:trawus/presentation/screens/home_screen/home_screen.dart';
+import '../../../../domain/Firebase/auth/user_authentications.dart';
 import 'package:trawus/presentation/widget/image_button.dart';
 import 'package:trawus/constants.dart';
 
@@ -18,7 +20,7 @@ class _SignInWithGoogleButtonState extends State<SignInWithGoogleButton> {
   @override
   Widget build(BuildContext context) {
     return _isLoading
-        ? CircularProgressIndicator()
+        ? LinearProgressIndicator()
         : ImageButton(
             onPressed: signInWithGoogle,
             caption: "Sign in with Google",
@@ -29,10 +31,16 @@ class _SignInWithGoogleButtonState extends State<SignInWithGoogleButton> {
   Future<void> signInWithGoogle() async {
     _changeIsLoadingState();
     await UserAuth.signInWithGoogle();
-    _changeIsLoadingState();
-    if (UserAuth.user.uid != null) {
-      createUserInFireStore(UserAuth.user.email);
-      Navigator.of(context).popAndPushNamed(HomeScreen.routeName);
+    if (UserAuth.userId != null) {
+      final userAlreadyExists = await FireStore.userExists(UserAuth.userId);
+      _changeIsLoadingState();
+      if (!userAlreadyExists) {
+        createUserInFireStore(UserAuth.user.email);
+        Navigator.of(context)
+            .pushReplacementNamed(NewProfileScreen.routeName, arguments: true);
+      return;
+      }
+      Navigator.of(context).pushReplacementNamed(HomeScreen.routeName, arguments: false);
     }
   }
 

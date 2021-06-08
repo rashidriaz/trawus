@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:trawus/Models/user.dart';
 import 'package:trawus/presentation/screens/profile_screen/widgets/profile_picture_avatar.dart';
 
+import '../../../../constants.dart';
+
 Container displayCaptionText(String text) {
   return Container(
       child: Text(
@@ -72,7 +74,7 @@ Row displayExtraInformation(
       Column(
         children: [
           displayContentText(location),
-          displayCaptionWithIcon(Icons.location_on, Colors.indigo, "Location"),
+          displayCaptionWithIcon(Icons.location_on, primaryColor, "Location"),
         ],
       ),
       SizedBox(
@@ -92,7 +94,7 @@ Row displayExtraInformation(
         children: [
           displayContentText(totalTrips),
           displayCaptionWithIcon(
-              Icons.map_outlined, Colors.indigo, "Total Trips"),
+              Icons.map_outlined, primaryColor, "Total Trips"),
         ],
       ),
     ],

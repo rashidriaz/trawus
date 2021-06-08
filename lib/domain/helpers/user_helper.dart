@@ -6,12 +6,12 @@ import 'package:trawus/domain/Firebase/auth/user_authentications.dart';
 import 'package:trawus/domain/Firebase/firestore/firestore.dart';
 import 'FireStoreUserData.dart';
 
-class UserHelper with ChangeNotifier {
+class UserHelper{
+
   Future<void> updateUser(User user, BuildContext context) async {
     try {
       await UserAuth.updateProfile(name: user.name, photoUrl: user.photoUrl);
       await FireStore.updateUserData(user: user);
-      notifyListeners();
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -22,8 +22,9 @@ class UserHelper with ChangeNotifier {
     }
   }
 
-  Future<User> get activeUser async{
-    Map<String, dynamic> userDataFromFireStore = await FireStore.getUserDataFromFireStore();
+  Future<User> get activeUser async {
+    Map<String, dynamic> userDataFromFireStore =
+        await FireStore.getUserDataFromFireStore();
     FireStoreUserData userData;
     if (userDataFromFireStore != null) {
       userData = FireStoreUserData.fromJson(userDataFromFireStore);
@@ -35,7 +36,6 @@ class UserHelper with ChangeNotifier {
       gender: userData?.gender ?? Gender.doNotSpecify,
       address: userData?.address ?? LocationAddress.defaultAddress,
     );
-    notifyListeners();
     return user;
   }
 

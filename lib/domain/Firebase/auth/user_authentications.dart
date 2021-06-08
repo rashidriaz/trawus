@@ -20,6 +20,7 @@ class UserAuth {
     } on PlatformException catch (error) {
       String message = "An Error Occurred, please enter valid credentials";
       _onPlatformException(error: error, context: context, message: message);
+      return;
     } on FirebaseAuthException catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -27,6 +28,7 @@ class UserAuth {
           backgroundColor: Theme.of(context).errorColor,
         ),
       );
+      return;
     } catch (error) {
       String message = "An Error Occurred, please enter valid credentials";
       ScaffoldMessenger.of(context).showSnackBar(
@@ -35,6 +37,7 @@ class UserAuth {
           backgroundColor: Theme.of(context).errorColor,
         ),
       );
+      return;
     }
   }
 
@@ -53,7 +56,9 @@ class UserAuth {
     final auth = FirebaseAuth.instance;
     final authResults = await auth.createUserWithEmailAndPassword(
         email: email, password: password);
-    authResults.user.sendEmailVerification();
+    if (authResults.user != null) {
+      authResults.user.sendEmailVerification();
+    }
   }
 
   static void _onPlatformException(
