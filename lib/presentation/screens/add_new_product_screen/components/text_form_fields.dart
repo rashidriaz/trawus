@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:trawus/constants.dart';
 import 'package:trawus/presentation/screens/edit_profile_screen/components/text_field_validator.dart';
 
 TextFormField titleTextFormField(String initialValue, Function onSave) {
@@ -59,9 +60,9 @@ TextFormField priceTextFormField(double initialValue, Function onSave) {
 Widget elevatedButton({@required Icon icon, @required Function onPressed}) {
   return ElevatedButton(
     style: ElevatedButton.styleFrom(
-        primary: Colors.white,
+        primary: primaryColor,
         shape: CircleBorder(),
-        padding: EdgeInsets.all(18)),
+        padding: EdgeInsets.all(30)),
     child: icon,
     onPressed: onPressed,
   );

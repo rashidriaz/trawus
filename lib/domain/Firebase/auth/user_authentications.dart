@@ -120,13 +120,82 @@ class UserAuth {
       {@required String name, @required String photoUrl}) async {
     try {
       await FirebaseAuth.instance.currentUser
-          .updateProfile(displayName: name, photoURL: photoUrl)
+          .updateDisplayName(name)
+          .onError((error, stackTrace) {
+        print(error.toString());
+        print(stackTrace);
+      });
+      await FirebaseAuth.instance.currentUser
+          .updatePhotoURL(name)
           .onError((error, stackTrace) {
         print(error.toString());
         print(stackTrace);
       });
     } catch (e) {
       print(e);
+    }
+  }
+
+  static Future<bool> verifyPhoneNumber(Function showSnackBar,
+      Function setVerificationID, String phoneNumber) async {
+    final _auth = FirebaseAuth.instance;
+    //Callback for when the user has already previously signed in with this phone number on this device
+    PhoneVerificationCompleted verificationCompleted =
+        (PhoneAuthCredential phoneAuthCredential) async {
+      await _auth.signInWithCredential(phoneAuthCredential);
+      showSnackBar("Phone number automatically verified and user signed in");
+    };
+    //Listens for errors with verification, such as too many attempts
+    PhoneVerificationFailed verificationFailed =
+        (FirebaseAuthException authException) {
+      showSnackBar(
+          'Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}');
+      return false;
+    };
+    //Callback for when the code is sent
+    PhoneCodeSent codeSent =
+        (String verificationId, [int forceResendingToken]) async {
+      showSnackBar('Please check your phone for the verification code.');
+      setVerificationID(verificationId);
+    };
+
+    PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout =
+        (String verificationId) {
+      setVerificationID(verificationId);
+    };
+    try {
+      await _auth.verifyPhoneNumber(
+          phoneNumber: phoneNumber,
+          timeout: const Duration(seconds: 5),
+          verificationCompleted: verificationCompleted,
+          verificationFailed: verificationFailed,
+          codeSent: codeSent,
+          codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
+      return true;
+    } catch (e) {
+      showSnackBar("Failed to Verify Phone Number: $e");
+      return false;
+    }
+  }
+
+  static Future<bool> linkPhoneNumberWithUser(
+      {@required String verificationId,
+      @required String sms,
+      Function showSnackBar}) async {
+    final _auth = FirebaseAuth.instance;
+    try {
+      final AuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: verificationId,
+        smsCode: sms,
+      );
+
+      await _auth.currentUser.linkWithCredential(credential);
+
+      showSnackBar("Phone Number registered Successfully");
+      return true;
+    } catch (e) {
+      showSnackBar("Failed to register PhoneNumber: " + e.toString());
+      return false;
     }
   }
 }
